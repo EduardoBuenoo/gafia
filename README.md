@@ -8,7 +8,6 @@ Sistema de cálculo de gastos com combustível e veículos elétricos para viage
 
 - Java
 - PostgreSQL
-- API IBGE
 - API de rotas
 
 ## 🧩 Funcionalidades
