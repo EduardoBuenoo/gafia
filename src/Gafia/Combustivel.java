@@ -1,4 +1,4 @@
-package gafia;
+package Gafia;
 
 import java.util.HashMap;
 import java.util.Map;

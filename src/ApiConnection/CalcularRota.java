@@ -1,4 +1,4 @@
-package conexaoaApi;
+package ApiConnection;
 
 import java.io.BufferedReader;
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package banco;
+package Database;
 
 
 import java.sql.Connection;

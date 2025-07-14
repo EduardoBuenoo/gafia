@@ -1,4 +1,4 @@
-package banco;
+package Database;
 
 //importar as bibliotecas
 import java.sql.Connection;

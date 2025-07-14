@@ -1,21 +1,23 @@
-package gafia;
+package Gafia;
 
-import banco.BDConnection;
-import banco.UsuarioDAO;
-import banco.EstadoDAO;
-import conexaoaApi.CalcularRota;
+import Database.BDConnection;
+import Database.UsuarioDAO;
+import Database.EstadoDAO;
+import Database.VeiculoDAO;
+import ApiConnection.CalcularRota;
+import Database.GaragemDAO;
 import java.util.*;
-import veiculos.Veiculo;
-import veiculos.VeiculoCombustao;
-import veiculos.VeiculoEletrico;
+import Vehicles.Veiculo;
+import Vehicles.VeiculoCombustao;
+import Vehicles.VeiculoEletrico;
 
 public class Gafia {
-    
+
     public static void main(String[] args) {
-        
-        try (Scanner leia = new Scanner(System.in)) {
+
+        try (Scanner read = new Scanner(System.in)) {
             UsuarioDAO usuarioDAO = new UsuarioDAO();
-            
+
             // Conexão com o banco
             if (BDConnection.conectar() != null) {
                 System.out.println("\033[32m----------------------------------\033[0m");
@@ -23,42 +25,84 @@ public class Gafia {
                 System.out.println("\033[32m----------------------------------\033[0m");
             } else {
                 System.err.println("--------------------");
-                System.err.println("| Falha na conexãão |");
+                System.err.println("| Falha na conexão |");
                 System.err.println("--------------------");
                 return;
             }
             
-            veiculos.Veiculo.GafiaBanner.mostrar();
+            //Exibindo os veiculos do banco de dados
+            /*
+                Map<Integer, String> veiculosE = VeiculoDAO.listarVeiculosEletricos();
+                System.out.println("Escolha seu veiculo eletrico: ");
+                for (Map.Entry<Integer, String> e : veiculosE.entrySet()) {
+                    System.out.println(e.getKey() + " - " + e.getValue());
+                }
+
+                while (true) {
+                    if (read.hasNextInt()) {
+                        veiculosEId = read.nextInt();
+                        read.nextLine();
+                        if (veiculosEId >= 1 && veiculosEId <= 33) break;
+                        System.out.println("Escolha uma opção: ");
+                    } else {
+                        read.next();
+                        System.err.println("Digite um número válido.");
+                    }
+                }
+                
+                Map<Integer, String> veiculosC = VeiculoDAO.listarVeiculosCombustao();
+                System.out.println("Escolha seu veiculo a combustão: ");
+                for (Map.Entry<Integer, String> e : veiculosC.entrySet()) {
+                    System.out.println(e.getKey() + " - " + e.getValue());
+                }
+
+                while (true) {
+                    if (read.hasNextInt()) {
+                        veiculosCId = read.nextInt();
+                        read.nextLine();
+                        if (veiculosCId >= 1 && veiculosCId <= 15) break;
+                        System.out.println("Escolha uma opção: ");
+                    } else {
+                        read.next();
+                        System.err.println("Digite um número válido.");
+                    }
+                }
+            */
             
+            
+            Vehicles.Veiculo.banner();
+
             System.out.println("Ja possui cadastro? (s/n)");
-            String resposta = leia.nextLine();
+            String resposta = read.nextLine(); 
+
             
-            int estadoId = -1;
             Usuario usuarioLogado = null;
-            
+
             if (resposta.equalsIgnoreCase("s")) {
                 // LOGIN
                 System.out.println("Digite seu email:");
-                String email = leia.nextLine();
+                String email = read.nextLine();
                 System.out.println("Digite sua senha:");
-                String senha = leia.nextLine();
-                
+                String senha = read.nextLine();
+
                 usuarioLogado = usuarioDAO.fazerLogin(email, senha);
-                
+
                 if (usuarioLogado == null) {
-                    System.err.println("Email ou senha incorretos.");
+                    System.err.println("Email ou senha incorreto.");
                     return;
                 }
+
+                int estadoId = -1; //INSTANCIANDO ESTADOS
                 
                 estadoId = usuarioLogado.getEstadoId();
                 System.out.println("\033[32mLogin realizado com sucesso!\033[0m");
                 usuarioLogado.exibirUsuario();
-                
+
                 double[] precos = EstadoDAO.buscarPrecosPorEstado(estadoId);
-                System.out.println("Preços médios dos combustiveis no seu estado:");
+                System.out.println("================ PREÇO MÉDIO DOS COMBUSTIVEIS NO SEU ESTADO ================");
                 System.out.printf("Gasolina: R$ %.2f | Alcool: R$ %.2f | Diesel: R$ %.2f | Energia: R$ %.2f\n",
                         precos[0], precos[1], precos[2], precos[3]);
-                
+
                 boolean menuAtivo = true;
                 while (menuAtivo) {
                     System.out.println("--------------------------------------------------------------------");
@@ -70,40 +114,136 @@ public class Gafia {
                     System.out.println("|5 - Sair                          ");
                     System.out.println("--------------------------------------------------------------------");
                     System.out.println();
-                    System.out.print("Escolha uma opcao: ");
-                    
-                    int opcao = leia.nextInt();
-                    leia.nextLine(); // limpar buffer
-                    
+                    System.out.print("Escolha uma opção: ");
+
+                    int opcao = read.nextInt();
+                    read.nextLine();
+
                     switch (opcao) {
                         case 1 -> {
                             System.out.println("--------------------------Veiculo Combustao-------------------------");
-                            VeiculoCombustao.getMapaVeiculos().forEach((id, veic) ->
-                                    System.out.println(id + " - " + veic));
-                            System.out.println("--------------------------------------------------------------------");
-                            escolherVeiculo(leia, usuarioLogado, VeiculoCombustao.getMapaVeiculos());
-                        }
+                            Map<Integer, String> veiculosC = VeiculoDAO.listarVeiculosCombustao();
+                            System.out.println("Escolha seu veiculo a combustão: ");
+                            for (Map.Entry<Integer, String> e : veiculosC.entrySet()) {
+                            System.out.println(e.getKey() + " - " + e.getValue());
+                            }
+
+                            int veiculosCId = -1; //INSTANCIANDO VEICULOS A COMBUSTAO
+                            while (true) {
+                                if (read.hasNextInt()) {
+                                    veiculosCId = read.nextInt();
+                                    read.nextLine();
+                                if (veiculosCId >= 1 && veiculosCId <= 15) break;
+                                    System.out.println("Escolha uma opção: ");
+                                } else {
+                                    read.next();
+                                    System.err.println("Digite um número válido.");
+                                }
+                            }
                             
+                            GaragemDAO garagemDAO = new GaragemDAO();
+                            boolean sucesso = garagemDAO.adicionarVeiculoNaGaragem(usuarioLogado.getId(), null, veiculosCId);
+                            
+                            if (sucesso) {
+                                System.out.println("Veiculo a combustao adicionado com sucesso!");
+                            } else {
+                                System.err.println("Erro ao adicionar o veiculo na garagem.");
+                            }
+                            System.out.println("--------------------------------------------------------------------");
+
+                        }
+
                         case 2 -> {
                             System.out.println("--------------------------Veiculo Eletrico--------------------------");
-                            VeiculoEletrico.getMapaVeiculos().forEach((id, veic) ->
-                                    System.out.println(id + " - " + veic));
-                            escolherVeiculo(leia, usuarioLogado, VeiculoEletrico.getMapaVeiculos());
-                            System.out.println("--------------------------------------------------------------------");
+                            Map<Integer, String> veiculosE = VeiculoDAO.listarVeiculosEletricos();
+                            System.out.println("Escolha seu veiculo eletrico: ");
+                            for (Map.Entry<Integer, String> e : veiculosE.entrySet()) {
+                            System.out.println(e.getKey() + " - " + e.getValue());
                         }
                             
+                            int veiculosEId = -1; //INSTANCIANDO VEICULOS ELETRICOS
+                            while (true) {
+                            if (read.hasNextInt()) {
+                                veiculosEId = read.nextInt();
+                                read.nextLine();
+                            if (veiculosEId >= 1 && veiculosEId <= 33) break;
+                                System.out.println("Escolha uma opção: ");
+                            } else {
+                                read.next();
+                                System.err.println("Digite um número válido.");
+                                }
+                            }
+                            GaragemDAO garagemDAO = new GaragemDAO();
+                            boolean sucesso = garagemDAO.adicionarVeiculoNaGaragem(usuarioLogado.getId(), veiculosEId, null);
+                            
+                            if (sucesso) {
+                                System.out.println("Veiculo eletrico adicionado com sucesso!");
+                            } else {
+                                System.err.println("Erro ao adicionar o veiculo na garagem.");
+                            }
+                            System.out.println("--------------------------------------------------------------------");
+                        }
+
                         case 3 -> {
-                            System.out.println("-----------------------Veiculos cadastrados-------------------------");
-                            usuarioLogado.listarVeiculos();
+                            boolean garagem = true;
+                            while(garagem) {
+                            System.out.println("--------------------------------------------------------------------");
+                            System.out.println("|             Garagem              ");
+                            System.out.println("|1 - Mostrar todos os veiculos     ");
+                            System.out.println("|2 - Mostrar veiculos a combustao  ");
+                            System.out.println("|3 - Mostrar veiculos eletricos    ");
+                            System.out.println("|4 - Voltar ao menu                ");
+                            System.out.println("--------------------------------------------------------------------");
+                            System.out.println();
+                            System.out.print("Escolha uma opção: ");
+                            
+                            opcao = read.nextInt();
+                            read.nextLine();
+                            
+                            switch(opcao) {
+                                case 1 -> {
+                                    System.out.println("-----------------------Veiculos Cadastrados-------------------------");
+                                    List<Veiculo> meusVeiculos = GaragemDAO.listarTodosOsVeiculosDoUsuario(usuarioLogado.getId());
+                                    
+                                    for (Veiculo v : meusVeiculos) {
+                                        System.out.println(v);
+                                    }
+                                }
+                                case 2 -> {
+                                    System.out.println("------------------Veiculos a Combustao Cadastrados-------------------");
+                                    List<VeiculoCombustao> meusCombustao = GaragemDAO.listarVeiculosCombustaoDoUsuario(usuarioLogado.getId());
+                                    if (meusCombustao.isEmpty()) {
+                                        System.err.println("Você não possui veículos a combustão cadastrados.");
+                                    } else {
+                                        meusCombustao.forEach(System.out::println);
+                                    }
+                                }
+                                case 3 -> {
+                                    System.out.println("-------------------Veiculos Eletricos Cadastrados--------------------");
+                                    List<VeiculoEletrico> meusEletricos = GaragemDAO.listarVeiculosEletricosDoUsuario(estadoId);
+                                    if (meusEletricos.isEmpty()) {
+                                        System.err.println("Você não possui veículos a combustão cadastrados.");
+                                    } else {
+                                        meusEletricos.forEach(System.out::println);
+                                    }
+                                }
+                                case 4 -> {
+                                    System.out.println("Retornando ao menu..");
+                                    garagem = false;
+                                }
+
+                                default -> System.err.println("Opção invalida!");
+                                }
+                            }
                             System.out.println("--------------------------------------------------------------------");
                         }
-                            
+
                         case 4 -> {
                             System.out.print("Digite o ponto de origem (Cidade, UF): ");
-                            String origem = leia.nextLine();
+                            String origem = read.nextLine();
 
                             System.out.print("Digite o ponto de destino (Cidade, UF): ");
-                            String destino = leia.nextLine();
+                            String destino = read.nextLine();
 
                             double distancia = CalcularRota.calcularDistancia(origem, destino);
                             if (distancia <= 0) {
@@ -154,8 +294,8 @@ public class Gafia {
                         System.out.println((i + 1) + " - " + meusVeiculos.get(i));
                         }
 
-                        int escolha = leia.nextInt();
-                        leia.nextLine();
+                        int escolha = read.nextInt();
+                        read.nextLine();
 
                         if (escolha < 1 || escolha > meusVeiculos.size()) {
                         System.err.println("--------------------------------------------------------------------");
@@ -168,18 +308,18 @@ public class Gafia {
                         System.out.println("--------------------------------------------------------------------");
                         System.out.printf("Distância: %.2f km\n", distancia);
                         System.out.println("--------------------------------------------------------------------");
-                        
-                        double consumo = veiculoEscolhido.getConsumoMedio();
+
+                        double avarege = veiculoEscolhido.getAvaregeCons();
 
                         if (veiculoEscolhido instanceof VeiculoCombustao combustao) {
                         System.out.println("--------------------------------------------------------------------");
-                        System.out.printf("Consumo do veículo: %.2f km/L                            \n", consumo);
-                        double litros = distancia / consumo;
+                        System.out.printf("Consumo do veículo: %.2f km/L                            \n", avarege);
+                        double litros = distancia / avarege;
                         System.out.printf("Litros necessários: %.2f L                               \n", litros);
                         double custo = combustao.calcularGasto(distancia, precos[0]);
                         System.out.printf("Custo total estimado (com combustível a R$ %.2f): R$ %.2f\n", precos[0], custo);
                         System.out.println("--------------------------------------------------------------------");
-                        
+
                         int emissaoPorKm = melhorCombustao.getQntCO2(); // gramas/km
                         double emissaoTotalGramas = emissaoPorKm * distancia;
                         double emissaoTotalKg = emissaoTotalGramas / 1000;
@@ -187,32 +327,29 @@ public class Gafia {
                         System.out.printf("Este veículo emitiu aproximadamente %.2f kg de CO₂ nesta viagem.\n", emissaoTotalKg);
                         System.out.println("--------------------------------------------------------------------");
                         } else if (veiculoEscolhido instanceof VeiculoEletrico eletrico) {
-                        System.out.printf("Consumo do veículo: %.2f km/kWh\n", consumo);   
+                        System.out.printf("Consumo do veículo: %.2f km/kWh\n", avarege);
                         System.out.print("Digite o percentual atual da bateria (%): ");
-                        int bateriaPercentual = leia.nextInt();
-                        leia.nextLine();
+                        int bateriaPercentual = read.nextInt();
+                        read.nextLine();
 
                         int duracaoBateriaKm = eletrico.getDurBat();
                         double autonomiaAtual = ((bateriaPercentual - 10) * duracaoBateriaKm) / 100.0;
 
-                        System.out.printf("Com %d%% de bateria, seu veículo pode rodar aproximadamente %.2f km.\n",
-                        bateriaPercentual, autonomiaAtual);
+                        System.out.printf("Com sua bateria atual o seu veículo pode rodar aproximadamente %.2f km.\n", autonomiaAtual);
 
                         if (distancia <= autonomiaAtual) {
-                        System.out.println("Você não precisará recarregar.");
+                        System.out.println("Você não precisará recarregar durante sua viagem!");
                         } else {
                         double distanciaRestante = distancia - autonomiaAtual;
                         int recargas = (int) Math.ceil(distanciaRestante / duracaoBateriaKm);
                         System.out.println("--------------------------------------------------------------------");
-                        System.out.println("Você precisará recarregar seu veículo durante a viagem!");
-                        System.out.println("Número de recargas estimadas: " + recargas);
+                        System.out.println("Você precisará recarregar seu veículo " + recargas + "durante essa viagem!");
                         }
-
-                        double energia = distancia / consumo;
+                        double energia = distancia / avarege;
                         System.out.printf("Energia necessária: %.2f kWh\n", energia);
 
                         double custo = eletrico.calcularGasto(distancia, precos[3]);
-                        System.out.printf("Custo total estimado (com energia a R$ %.2f): R$ %.2f\n", precos[3], custo);
+                        System.out.printf("Custo total estimado: R$ %.2f\n", custo);
                         System.out.println("--------------------------------------------------------------------");
 
                         // Comparação de emissão de CO2 com veículo de combustão mais econômico
@@ -222,8 +359,9 @@ public class Gafia {
                         double custoDiesel   = melhorCombustao.calcularGasto(distancia, precos[2]); // diesel
                         double custoEletrico = eletrico.calcularGasto(distancia, precos[3]); // energia elétrica
 
+
                         System.out.printf("Comparado ao veículo a combustão mais econômico da sua garagem (%s %s):\n",
-                        melhorCombustao.getMarca(), melhorCombustao.getModelo());
+                        melhorCombustao.getBrand(), melhorCombustao.getModel());
 
                         System.out.printf("- Você economizou R$ %.2f em relação à gasolina (R$ %.2f).\n",
                         custoGasolina - custoEletrico, custoGasolina);
@@ -240,103 +378,87 @@ public class Gafia {
                         }
                     }
                 }
-                        
-                            
+
+
                         case 5 -> {
                             System.out.println("Saindo...");
                             menuAtivo = false;
                         }
-                            
+
                         default -> System.err.println("Opção invalida!");
                     }
                 }
-                
-                
+
+
             } else {
                 // CADASTRO
                 System.out.println("Vamos criar seu cadastro:");
-                
+
                 String nome, sobrenome, cpf, nascimento, email, telefone, senha;
                 do {
                     System.out.println("Digite seu nome:");
-                    nome = leia.nextLine();
+                    nome = read.nextLine();
                 } while (nome.isEmpty());
-                
+
                 do {
                     System.out.println("Digite seu sobrenome:");
-                    sobrenome = leia.nextLine();
+                    sobrenome = read.nextLine();
                 } while (sobrenome.isEmpty());
-                
+
                 do {
                     System.out.println("Digite seu CPF:");
-                    cpf = leia.nextLine();
+                    cpf = read.nextLine();
                 } while (cpf.isEmpty());
-                
+
                 do {
                     System.out.println("Digite sua data de nascimento:");
-                    nascimento = leia.nextLine();
+                    nascimento = read.nextLine();
                 } while (nascimento.isEmpty());
-                
+
                 do {
                     System.out.println("Digite seu email:");
-                    email = leia.nextLine();
+                    email = read.nextLine();
                 } while (email.isEmpty());
-                
+
                 do {
                     System.out.println("Digite seu telefone:");
-                    telefone = leia.nextLine();
+                    telefone = read.nextLine();
                 } while (telefone.isEmpty());
-                
+
                 do {
                     System.out.println("Crie uma senha:");
-                    senha = leia.nextLine();
+                    senha = read.nextLine();
                 } while (senha.isEmpty());
-                
+
                 // Seleção de estado
                 Map<Integer, String> estados = EstadoDAO.listarEstados();
                 System.out.println("Escolha seu estado:");
                 for (Map.Entry<Integer, String> e : estados.entrySet()) {
                     System.out.println(e.getKey() + " - " + e.getValue());
                 }
-                
+
+                int estadoId = -1;
                 while (true) {
-                    if (leia.hasNextInt()) {
-                        estadoId = leia.nextInt();
-                        leia.nextLine();
+                    if (read.hasNextInt()) {
+                        estadoId = read.nextInt();
+                        read.nextLine();
                         if (estadoId >= 1 && estadoId <= 27) break;
                         System.out.println("Escolha um numero de 1 a 27.");
                     } else {
-                        leia.next();
+                        read.next();
                         System.out.println("Digite um número válido.");
                     }
                 }
                 
+
                 Usuario novoUsuario = new Usuario(nome, sobrenome, cpf, nascimento, email, telefone, senha, estadoId);
                 if (usuarioDAO.saveUsuario(novoUsuario)) {
                     System.out.println("Cadastro realizado com sucesso!");
                 } else {
                     System.out.println("Erro ao cadastrar.");
                 }
-            }   
-        }
-    }
-
-    //Método auxiliar para escolher um veículo
-    
-    public static void escolherVeiculo(Scanner leia, Usuario usuario, Map<Integer, ? extends Veiculo> mapa) {
-        System.out.print("Digite o ID do veículo que deseja adicionar ao seu cadastro: ");
-        
-        int idEscolhido = leia.nextInt();
-        leia.nextLine();
-
-        Veiculo veiculoEscolhido = mapa.get(idEscolhido);
-        
-        if (veiculoEscolhido != null) {
-            usuario.adicionarVeiculo(veiculoEscolhido);
-            System.out.println("Veículo adicionado com sucesso!");
-        } else {
-            System.out.println("ID inválido! Veículo não encontrado.");
+            }
         }
     }
 }
-
+    

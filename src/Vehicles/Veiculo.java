@@ -1,23 +1,23 @@
-package veiculos;
+package Vehicles;
 
-import gafia.Usuario;
+import Gafia.Usuario;
 import java.util.Map;
 import java.util.Scanner;
 
 public abstract class Veiculo {
     protected int id;
-    protected String ano;
-    protected String marca;
-    protected String modelo;
-    protected double consumoMedio;
+    protected String year;
+    protected String brand;
+    protected String model;
+    protected double averageCons;
     
 
-    public Veiculo(int id, String ano, String marca, String modelo, double consumoMedio) {
+    public Veiculo(int id, String year, String brand, String model, double averageCons) {
         this.id = id;
-        this.ano = ano;
-        this.marca = marca;
-        this.modelo = modelo;
-        this.consumoMedio = consumoMedio;
+        this.year = year;
+        this.brand = brand;
+        this.model = model;
+        this.averageCons = averageCons;
     }
 
     public int getId() {
@@ -28,49 +28,49 @@ public abstract class Veiculo {
         this.id = id;
     }
 
-    public String getAno() {
-        return ano;
+    public String getYear() {
+        return year;
     }
 
-    public void setAno(String ano) {
-        this.ano = ano;
+    public void setYear(String year) {
+        this.year = year;
     }
 
-    public String getMarca() {
-        return marca;
+    public String getBrand() {
+        return brand;
     }
 
-    public void setMarca(String marca) {
-        this.marca = marca;
+    public void setBrand(String brand) {
+        this.brand = brand;
     }
 
-    public String getModelo() {
-        return modelo;
+    public String getModel() {
+        return model;
     }
 
-    public void setModelo(String modelo) {
-        this.modelo = modelo;
+    public void setModel(String model) {
+        this.model = model;
     }
 
-    public double getConsumoMedio() {
-        return consumoMedio;
+    public double getAvaregeCons() {
+        return averageCons;
     }
 
-    public void setConsumoMedio(double consumoMedio) {
-        this.consumoMedio = consumoMedio;
+    public void setConsumoMedio(double averageCons) {
+        this.averageCons = averageCons;
     }
     
     
     
     @Override
     public String toString() {
-    return marca + " " + modelo + " (" + ano + ")";
+    return brand + " " + model + " (" + year + ")";
     }
     
-    private static void escolherVeiculo(Scanner leia, Usuario usuario, Map<Integer, ? extends Veiculo> mapa) {    
+    private static void escolherVeiculo(Scanner read, Usuario usuario, Map<Integer, ? extends Veiculo> mapa) {    
     System.out.print("Digite o ID do veículo que deseja adicionar ao seu cadastro: ");
-    int id = leia.nextInt();
-    leia.nextLine();
+    int id = read.nextInt();
+    read.nextLine();
 
     Veiculo escolhido = mapa.get(id);
     if (escolhido != null) {
@@ -83,8 +83,9 @@ public abstract class Veiculo {
     
     public abstract double calcularGasto(double distancia, double precoEnergiaOuCombustivel);
 
-    public class GafiaBanner {
-    public static void mostrar() {
+
+    
+        public static void banner() {
         System.out.println("---------------------------------------------------------------------------------");
         System.out.println("|                              ______                                           |");
         System.out.println("|                             /|_||_\\`.__                                       |");
@@ -94,9 +95,6 @@ public abstract class Veiculo {
         System.out.println("|                  GAFIA - AUTONOMIA DE CARROS ELÉTRICOS                        |");
         System.out.println("---------------------------------------------------------------------------------");
     }
-}
-
-
 }
     
 

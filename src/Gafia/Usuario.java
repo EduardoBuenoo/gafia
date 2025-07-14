@@ -1,13 +1,13 @@
-package gafia;
+package Gafia;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.Random;
-import veiculos.Veiculo;
+import Vehicles.Veiculo;
 
 public class Usuario {
-    private String id;
+    private int id;
     private String nome;
     private String sobrenome;
     private String cpf;
@@ -23,7 +23,6 @@ public Usuario(){
        
     public Usuario(String nome, String sobrenome, String cpf, String nascimento,
                     String email, String phone, String senha, int estadoId){
-        this.id = gerarId();
         this.nome = nome;
         this.sobrenome = sobrenome;
         this.cpf = cpf;
@@ -33,14 +32,22 @@ public Usuario(){
         this.senha = senha;
         this.estadoId = estadoId;
     }
-        private String gerarId(){
-            Random geradorAleatorio = new Random();
-            int numero = 10000000 + geradorAleatorio.nextInt(90000000);
-                return String.valueOf(numero);
-        }
+    
+    public Usuario(int id, String nome, String sobrenome, String cpf, String nascimento,
+                    String email, String phone, String senha, int estadoId){
+        this.id = id;
+        this.nome = nome;
+        this.sobrenome = sobrenome;
+        this.cpf = cpf;
+        this.dtnasc = nascimento;
+        this.email = email;
+        this.telefone = phone;
+        this.senha = senha;
+        this.estadoId = estadoId;
+    }
        
 
-    public String getId(){
+    public int getId(){
         return id;
     }
     public String getNome(){
@@ -67,10 +74,14 @@ public Usuario(){
     public int getEstadoId() {
         return estadoId;
     }
-
-    public void estadoId(int estadoId){
+    
+    public void setId(int id) {
+        this.id = id;
+    }
+    public void estadoId(int estadoId) {
         this.estadoId = estadoId;
     }
+    
     public void exibirUsuario(){
         System.out.println("--------------------------------------------------------------------");
         System.out.println("ID: " + id);
