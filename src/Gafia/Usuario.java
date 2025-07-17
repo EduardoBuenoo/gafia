@@ -1,10 +1,14 @@
 package Gafia;
 
+import Database.UsuarioDAO;
+import Database.EstadoDAO;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.Random;
 import Vehicles.Veiculo;
+import java.util.Map;
+import java.util.Scanner;
 
 public class Usuario {
     private int id;
@@ -82,19 +86,19 @@ public Usuario(){
         this.estadoId = estadoId;
     }
     
-    public void exibirUsuario(){
-        System.out.println("--------------------------------------------------------------------");
-        System.out.println("ID: " + id);
-        System.out.println("Nome: " + nome);
-        System.out.println("Sobrenome: " + sobrenome);
-        System.out.println("CPF: " + cpf);
-        System.out.println("Data de Nascimento: " + dtnasc);
-        System.out.println("Email: " + email);
-        System.out.println("Telefone: " + telefone);
-        System.out.println("--------------------------------------------------------------------");
-    }
-
     private List<Veiculo> veiculosEscolhidos = new ArrayList<>();
+    
+    public void exibirUsuario(){
+    System.out.println("--------------------------------------------------------------------");
+    System.out.println("ID: " + id);
+    System.out.println("Nome: " + nome);
+    System.out.println("Sobrenome: " + sobrenome);
+    System.out.println("CPF: " + cpf);
+    System.out.println("Data de Nascimento: " + dtnasc);
+    System.out.println("Email: " + email);
+    System.out.println("Telefone: " + telefone);
+    System.out.println("--------------------------------------------------------------------");
+    }
 
     public void adicionarVeiculo(Veiculo v) {
         veiculosEscolhidos.add(v);

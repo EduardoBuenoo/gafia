@@ -29,55 +29,46 @@ public class Gafia {
                 System.err.println("--------------------");
                 return;
             }
+
+            System.out.println("Você possui cadastro?");
+            System.out.println("1 - Sim");
+            System.out.println("2 - Não");
             
-            //Exibindo os veiculos do banco de dados
-            /*
-                Map<Integer, String> veiculosE = VeiculoDAO.listarVeiculosEletricos();
-                System.out.println("Escolha seu veiculo eletrico: ");
-                for (Map.Entry<Integer, String> e : veiculosE.entrySet()) {
-                    System.out.println(e.getKey() + " - " + e.getValue());
-                }
-
-                while (true) {
-                    if (read.hasNextInt()) {
-                        veiculosEId = read.nextInt();
-                        read.nextLine();
-                        if (veiculosEId >= 1 && veiculosEId <= 33) break;
-                        System.out.println("Escolha uma opção: ");
-                    } else {
-                        read.next();
-                        System.err.println("Digite um número válido.");
-                    }
-                }
-                
-                Map<Integer, String> veiculosC = VeiculoDAO.listarVeiculosCombustao();
-                System.out.println("Escolha seu veiculo a combustão: ");
-                for (Map.Entry<Integer, String> e : veiculosC.entrySet()) {
-                    System.out.println(e.getKey() + " - " + e.getValue());
-                }
-
-                while (true) {
-                    if (read.hasNextInt()) {
-                        veiculosCId = read.nextInt();
-                        read.nextLine();
-                        if (veiculosCId >= 1 && veiculosCId <= 15) break;
-                        System.out.println("Escolha uma opção: ");
-                    } else {
-                        read.next();
-                        System.err.println("Digite um número válido.");
-                    }
-                }
-            */
-            
-            
-            Vehicles.Veiculo.banner();
-
-            System.out.println("Ja possui cadastro? (s/n)");
-            String resposta = read.nextLine(); 
-
+            String resposta = read.nextLine();
             
             Usuario usuarioLogado = null;
+            
+            if(resposta.equalsIgnoreCase("2")) {
+                
+                Menu.realizarCadastro(read);
+                System.out.println("Cadastro concluido.");
+                System.out.println("Faça login para prosseguir.");
+                System.out.println("");
+                
+                System.out.println("Digite seu email:");
+                String email = read.nextLine();
+                System.out.println("Digite sua senha:");
+                String senha = read.nextLine();
+                
+                usuarioLogado = usuarioDAO.fazerLogin(email, senha);
+                if (usuarioLogado != null) {
+                    Menu.exibindoMenuPrincipal(usuarioLogado, read);
+                } else {
+                    System.err.println("Login falhou. Email ou senha incorretos.");
+                }
+                
+            } else if (resposta.equalsIgnoreCase("1")){
+                
+                usuarioLogado = Menu.realizarloginMenu(read);
+                if (usuarioLogado != null) {
+                    Menu.exibindoMenuPrincipal(usuarioLogado, read);
+                } else {
+                System.err.println("Login falhou. Encerrando.");
+                }  
+            }
 
+           
+/*
             if (resposta.equalsIgnoreCase("s")) {
                 // LOGIN
                 System.out.println("Digite seu email:");
@@ -390,75 +381,10 @@ public class Gafia {
                 }
 
 
-            } else {
-                // CADASTRO
-                System.out.println("Vamos criar seu cadastro:");
-
-                String nome, sobrenome, cpf, nascimento, email, telefone, senha;
-                do {
-                    System.out.println("Digite seu nome:");
-                    nome = read.nextLine();
-                } while (nome.isEmpty());
-
-                do {
-                    System.out.println("Digite seu sobrenome:");
-                    sobrenome = read.nextLine();
-                } while (sobrenome.isEmpty());
-
-                do {
-                    System.out.println("Digite seu CPF:");
-                    cpf = read.nextLine();
-                } while (cpf.isEmpty());
-
-                do {
-                    System.out.println("Digite sua data de nascimento:");
-                    nascimento = read.nextLine();
-                } while (nascimento.isEmpty());
-
-                do {
-                    System.out.println("Digite seu email:");
-                    email = read.nextLine();
-                } while (email.isEmpty());
-
-                do {
-                    System.out.println("Digite seu telefone:");
-                    telefone = read.nextLine();
-                } while (telefone.isEmpty());
-
-                do {
-                    System.out.println("Crie uma senha:");
-                    senha = read.nextLine();
-                } while (senha.isEmpty());
-
-                // Seleção de estado
-                Map<Integer, String> estados = EstadoDAO.listarEstados();
-                System.out.println("Escolha seu estado:");
-                for (Map.Entry<Integer, String> e : estados.entrySet()) {
-                    System.out.println(e.getKey() + " - " + e.getValue());
-                }
-
-                int estadoId = -1;
-                while (true) {
-                    if (read.hasNextInt()) {
-                        estadoId = read.nextInt();
-                        read.nextLine();
-                        if (estadoId >= 1 && estadoId <= 27) break;
-                        System.out.println("Escolha um numero de 1 a 27.");
-                    } else {
-                        read.next();
-                        System.out.println("Digite um número válido.");
-                    }
-                }
-                
-
-                Usuario novoUsuario = new Usuario(nome, sobrenome, cpf, nascimento, email, telefone, senha, estadoId);
-                if (usuarioDAO.saveUsuario(novoUsuario)) {
-                    System.out.println("Cadastro realizado com sucesso!");
-                } else {
-                    System.out.println("Erro ao cadastrar.");
+            } */
                 }
             }
         }
-    }
-}
+    
+
     

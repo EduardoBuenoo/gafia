@@ -6,6 +6,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Map;
+import java.util.Scanner;
 
 public class UsuarioDAO {
     
@@ -41,7 +43,6 @@ public class UsuarioDAO {
         return false;
     }
 }
-
     
     //METODO DE LOGIN
   public Usuario fazerLogin(String email, String senha) {
@@ -97,6 +98,7 @@ public class UsuarioDAO {
         }
         
         return estadoId;
-    } 
+    }
+    
 }
     
