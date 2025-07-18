@@ -32,52 +32,54 @@ public class Menu {
         
     UsuarioDAO usuarioDAO = new UsuarioDAO();
 
-    System.out.println("Vamos criar seu cadastro:");
+    System.out.println("| Vamos criar seu cadastro:");
+    System.out.println("| ");
 
     String nome, sobrenome, cpf, nascimento, email, telefone, senha;
     do {
-        System.out.println("Digite seu nome:");
+        System.out.print("| Digite seu nome: ");
         nome = read.nextLine();
     } while (nome.isEmpty());
 
     do {
-        System.out.println("Digite seu sobrenome:");
+        System.out.print("| Digite seu sobrenome: ");
         sobrenome = read.nextLine();
     } while (sobrenome.isEmpty());
 
     do {
-        System.out.println("Digite seu CPF:");
+        System.out.print("| Digite seu CPF: ");
         cpf = read.nextLine();
     } while (cpf.isEmpty());
 
     do {
-        System.out.println("Digite sua data de nascimento:");
+        System.out.print("| Digite sua data de nascimento: ");
         nascimento = read.nextLine();
     } while (nascimento.isEmpty());
 
     do {
-        System.out.println("Digite seu email:");
+        System.out.print("| Digite seu email: ");
         email = read.nextLine();
     } while (email.isEmpty());
 
     do {
-        System.out.println("Digite seu telefone:");
+        System.out.print("| Digite seu telefone: ");
         telefone = read.nextLine();
     } while (telefone.isEmpty());
 
     do {
-        System.out.println("Digite uma senha:");
+        System.out.print("| Digite uma senha: ");
         senha = read.nextLine();
     } while (senha.isEmpty());
 
     // Seleção de estado
     Map<Integer, String> estados = EstadoDAO.listarEstados();
     
-    System.out.println("Escolha seu estado:");
+    System.out.println("| ");
     
     for (Map.Entry<Integer, String> e : estados.entrySet()) {
-    System.out.println(e.getKey() + " - " + e.getValue());
+    System.out.println("| " + e.getKey() + " - " + e.getValue());
     }
+    System.out.print("| Selecione seu estado: ");
 
     int estadoId = -1;
     
@@ -89,21 +91,21 @@ public class Menu {
             
             if (estadoId >= 1 && estadoId <= 27) break;
             
-            System.out.println("Escolha um numero de 1 a 27.");
+            System.out.println("| Escolha um numero de 1 a 27.");
             
             } else {
             
                 read.next();
-                System.out.println("Digite um número válido.");
+                System.out.println("| Digite um número válido.");
         }
     }
     
     Usuario novoUsuario = new Usuario(nome, sobrenome, cpf, nascimento, email, telefone, senha, estadoId);
     
     if (usuarioDAO.saveUsuario(novoUsuario)) {
-        System.out.println("Cadastro realizado com sucesso!");
+        System.out.println("| Cadastro realizado com sucesso!");
         } else {
-            System.out.println("Erro ao cadastrar.");
+            System.out.println("| Erro ao cadastrar.");
         }
     }
     
@@ -112,27 +114,30 @@ public class Menu {
         
     UsuarioDAO usuarioDAO = new UsuarioDAO();
         
-    System.out.println("Digite seu email:");
+    System.out.println("--------------------------------------------------------------------");
+    System.out.print("| Digite seu email: ");
     String email = read.nextLine();
-    System.out.println("Digite sua senha:");
+        System.out.println("|");
+    System.out.print("| Digite sua senha: ");
     String senha = read.nextLine();
 
     Usuario usuarioLogado = usuarioDAO.fazerLogin(email, senha);
 
     if (usuarioLogado == null) {
-        System.err.println("Email ou senha incorreto.");
+        System.err.println("| Email ou senha incorreto.");
         return null;
         }
 
     int estadoId = -1; //INSTANCIANDO ESTADOS
                 
     estadoId = usuarioLogado.getEstadoId();
-    System.out.println("\033[32mLogin realizado com sucesso!\033[0m");
+    System.out.println("|");
+    System.out.println("| " + "\033[32mLogin realizado com sucesso!\033[0m");
     usuarioLogado.exibirUsuario();
 
     double[] precos = EstadoDAO.buscarPrecosPorEstado(estadoId);
-    System.out.println("================ PREÇO MÉDIO DOS COMBUSTIVEIS NO SEU ESTADO ================");
-    System.out.printf("Gasolina: R$ %.2f | Alcool: R$ %.2f | Diesel: R$ %.2f | Energia: R$ %.2f\n", precos[0], precos[1], precos[2], precos[3]);
+    System.out.println("| ================ PREÇO MÉDIO DOS COMBUSTIVEIS NO SEU ESTADO ================");
+    System.out.printf("| Gasolina: R$ %.2f | Alcool: R$ %.2f | Diesel: R$ %.2f | Energia: R$ %.2f\n", precos[0], precos[1], precos[2], precos[3]);
         return usuarioLogado;
     }
     
@@ -140,10 +145,10 @@ public class Menu {
     public static void selecionarVeiculoACombustao(Usuario usuarioLogado, Scanner read) {
         System.out.println("--------------------------Veiculo Combustao-------------------------");
         Map<Integer, String> veiculosC = VeiculoDAO.listarVeiculosCombustao();
-        System.out.println("Escolha seu veiculo a combustão: ");
         for (Map.Entry<Integer, String> e : veiculosC.entrySet()) {
-        System.out.println(e.getKey() + " - " + e.getValue());
+        System.out.println("| " + e.getKey() + " - " + e.getValue());
         }
+        System.out.print("| Escolha seu veiculo a combustão: ");
 
         int veiculosCId = -1; //INSTANCIANDO VEICULOS A COMBUSTAO
         while (true) {
@@ -151,30 +156,29 @@ public class Menu {
             veiculosCId = read.nextInt();
             read.nextLine();
             if (veiculosCId >= 1 && veiculosCId <= 15) break;
-            System.out.println("Escolha uma opção: ");
+            System.out.print("| Escolha uma opção: ");
         } else {
             read.next();
-            System.err.println("Digite um número válido.");
+            System.err.println("| Digite um número válido.");
             }
         }
         GaragemDAO garagemDAO = new GaragemDAO();
         boolean sucesso = garagemDAO.adicionarVeiculoNaGaragem(usuarioLogado.getId(), null, veiculosCId);
                             
         if (sucesso) {
-        System.out.println("Veiculo a combustao adicionado com sucesso!");
+        System.out.println("| Veiculo a combustao adicionado com sucesso!");
         } else {
-        System.err.println("Erro ao adicionar o veiculo na garagem.");
+        System.err.println("| Erro ao adicionar o veiculo na garagem.");
         }
-        System.out.println("--------------------------------------------------------------------");
     }
     
     public static void selecionarVeiculoEletrico(Usuario usuarioLogado, Scanner read) {
         System.out.println("--------------------------Veiculo Eletrico--------------------------");
         Map<Integer, String> veiculosE = VeiculoDAO.listarVeiculosEletricos();
-        System.out.println("Escolha seu veiculo eletrico: ");
         for (Map.Entry<Integer, String> e : veiculosE.entrySet()) {
-        System.out.println(e.getKey() + " - " + e.getValue());
+        System.out.println("| " + e.getKey() + " - " + e.getValue());
         }
+        System.out.print("| Escolha seu veiculo eletrico: ");
                             
         int veiculosEId = -1; //INSTANCIANDO VEICULOS ELETRICOS
         
@@ -183,10 +187,10 @@ public class Menu {
                 veiculosEId = read.nextInt();
                 read.nextLine();
             if (veiculosEId >= 1 && veiculosEId <= 33) break;
-                System.out.println("Escolha uma opção: ");
+                System.out.println("| Escolha uma opção: ");
             } else {
                 read.next();
-                System.err.println("Digite um número válido.");
+                System.err.println("| Digite um número válido.");
             }
         }
         
@@ -194,14 +198,18 @@ public class Menu {
         boolean sucesso = garagemDAO.adicionarVeiculoNaGaragem(usuarioLogado.getId(), veiculosEId, null);
                             
         if (sucesso) {
-            System.out.println("Veiculo eletrico adicionado com sucesso!");
+            System.out.println("| Veiculo eletrico adicionado com sucesso!");
         } else {
-            System.err.println("Erro ao adicionar o veiculo na garagem.");
+            System.err.println("| Erro ao adicionar o veiculo na garagem.");
         }
-        System.out.println("--------------------------------------------------------------------");
     }
     
-    public static void buscandoRota(Usuario usuarioLogado, Scanner read) {
+public static void buscandoRota(Usuario usuarioLogado, Scanner read) {
+    if (usuarioLogado == null) {
+        System.err.println("Você precisa estar logado para usar essa funcionalidade.");
+        return;
+    }
+
     System.out.print("Digite o ponto de origem (Cidade, UF): ");
     String origem = read.nextLine();
 
@@ -214,8 +222,9 @@ public class Menu {
         return;
     }
 
-    List<Veiculo> meusVeiculos = usuarioLogado.getVeiculos();
-    if (meusVeiculos.isEmpty()) {
+    List<Veiculo> meusVeiculos = GaragemDAO.listarTodosOsVeiculosDoUsuario(usuarioLogado.getId());
+    
+    if (meusVeiculos == null || meusVeiculos.isEmpty()) {
         System.err.println("Você não possui veículos cadastrados.");
         return;
     }
@@ -228,7 +237,7 @@ public class Menu {
     double menorCustoCombustao = Double.MAX_VALUE;
 
     for (Veiculo v : meusVeiculos) {
-        double custo;
+        double custo = 0;
         if (v instanceof VeiculoCombustao combustao) {
             custo = combustao.calcularGasto(distancia, precos[0]);
             if (custo < menorCustoCombustao) {
@@ -272,9 +281,10 @@ public class Menu {
         double custo = combustao.calcularGasto(distancia, precos[0]);
         System.out.printf("Consumo: %.2f km/L | Litros: %.2f | Custo: R$ %.2f\n", avarege, litros, custo);
 
-        int emissaoPorKm = melhorCombustao.getQntCO2(); // gramas/km
+        int emissaoPorKm = melhorCombustao.getQntCO2();
         double emissaoTotalKg = (emissaoPorKm * distancia) / 1000.0;
         System.out.printf("Emissão estimada: %.2f kg CO₂\n", emissaoTotalKg);
+
     } else if (veiculoEscolhido instanceof VeiculoEletrico eletrico) {
         System.out.print("Digite o percentual atual da bateria (%): ");
         int bateriaPercentual = read.nextInt();
@@ -309,8 +319,10 @@ public class Menu {
     }
 }
 
+
     
     // METODOS DO SUBMENU DE EXIBIÇAO DE VEICULOS
+    
     public static void mostrarTodosOsVeiculos(Usuario usuarioLogado, Scanner read) {
         System.out.println("-----------------------Veiculos Cadastrados-------------------------");
         List<Veiculo> meusVeiculos = GaragemDAO.listarTodosOsVeiculosDoUsuario(usuarioLogado.getId());
@@ -340,6 +352,45 @@ public class Menu {
         }
     }
     
+    public static void menuDaGaragem(Usuario usuarioLogado, Scanner read, int opcao) {
+        boolean garagem = true;
+        while(garagem) {
+            System.out.println("--------------------------------------------------------------------");
+            System.out.println("|             Garagem              ");
+            System.out.println("|1 - Mostrar todos os veiculos     ");
+            System.out.println("|2 - Mostrar veiculos a combustao  ");
+            System.out.println("|3 - Mostrar veiculos eletricos    ");
+            System.out.println("|4 - Voltar ao menu                ");
+            System.out.println("--------------------------------------------------------------------");
+            System.out.println();
+            System.out.print("Escolha uma opção: ");
+                            
+            opcao = read.nextInt();
+            read.nextLine();
+                            
+            switch(opcao) {
+                case 1 -> {
+                    Menu.mostrarTodosOsVeiculos(usuarioLogado, read);
+                }
+                               
+                case 2 -> {
+                    Menu.mostrarVeiculoACombustao(usuarioLogado, read);
+                }
+                
+                case 3 -> {
+                    Menu.mostrarVeiculoEletrico(usuarioLogado, read, opcao);
+                }
+            
+                case 4 -> {
+                    System.out.println("Retornando ao menu..");
+                    garagem = false;
+                }
+
+                default -> System.err.println("Opção invalida!");
+                }
+            }
+        }
+    
     
     
     //EXIBINDO O MENU PRINCIPAL
@@ -354,7 +405,7 @@ public class Menu {
                     System.out.println("|4 - Calcular viagem               ");
                     System.out.println("|5 - Sair                          ");
                     System.out.println("--------------------------------------------------------------------");
-                    System.out.println();
+                    System.out.println("|");
                     System.out.print("Escolha uma opção: ");
 
                     int opcao = read.nextInt();
@@ -371,41 +422,7 @@ public class Menu {
                         }
 
                         case 3 -> {
-                            boolean garagem = true;
-                            while(garagem) {
-                            System.out.println("--------------------------------------------------------------------");
-                            System.out.println("|             Garagem              ");
-                            System.out.println("|1 - Mostrar todos os veiculos     ");
-                            System.out.println("|2 - Mostrar veiculos a combustao  ");
-                            System.out.println("|3 - Mostrar veiculos eletricos    ");
-                            System.out.println("|4 - Voltar ao menu                ");
-                            System.out.println("--------------------------------------------------------------------");
-                            System.out.println();
-                            System.out.print("Escolha uma opção: ");
-                            
-                            opcao = read.nextInt();
-                            read.nextLine();
-                            
-                            switch(opcao) {
-                                case 1 -> {
-                                    Menu.mostrarTodosOsVeiculos(usuarioLogado, read);
-                                    }
-                                
-                                case 2 -> {
-                                    Menu.mostrarVeiculoACombustao(usuarioLogado, read);
-                                }
-                                case 3 -> {
-                                    Menu.mostrarVeiculoEletrico(usuarioLogado, read, opcao);
-                                }
-                                case 4 -> {
-                                    System.out.println("Retornando ao menu..");
-                                    garagem = false;
-                                }
-
-                                default -> System.err.println("Opção invalida!");
-                                }
-                            }
-                            System.out.println("--------------------------------------------------------------------");
+                            Menu.menuDaGaragem(usuarioLogado, read, opcao);
                         }
 
                         case 4 -> {
