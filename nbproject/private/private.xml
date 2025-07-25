@@ -3,10 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/home/kaio/Documentos/gafia/src/Views/Login.fxml</file>
+            <file>file:/home/kaio/Documentos/gafia/src/Interface/LoginController.java</file>
+            <file>file:/home/kaio/Documentos/gafia/src/Views/login.fxml.css</file>
             <file>file:/home/kaio/Documentos/gafia/src/Gafia/Gafia.java</file>
-            <file>file:/home/kaio/Documentos/gafia/src/Gafia/Usuario.java</file>
-            <file>file:/home/kaio/Documentos/gafia/src/Database/UsuarioDAO.java</file>
-            <file>file:/home/kaio/Documentos/gafia/src/Gafia/Menu.java</file>
+            <file>file:/home/kaio/Documentos/gafia/src/Interface/App.java</file>
         </group>
     </open-files>
 </project-private>
