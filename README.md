@@ -24,3 +24,5 @@ git clone https://github.com/eduardobuenoo/gafia.git
 cd gafia
 javac Main.java
 java Main
+
+TESTEE
